@@ -26,6 +26,7 @@ const parkingSlice = createSlice({
      * @param {PayloadAction<Spot[]>} action - The action containing the new parking spots.
      */
     setParkingSpots(state, action: PayloadAction<Spot[]>) {
+      if (!action.payload) return;
       state.spots = action.payload;
       state.floors = [...new Set(state.spots.map((spot) => spot.floor))].sort();
     },

@@ -13,7 +13,6 @@ export const getReservationByUser = async (user: string) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching reservations by user:", error);
-    throw error;
   }
 };
 
