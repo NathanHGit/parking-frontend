@@ -104,24 +104,26 @@ function Parking({ name }: ParkingProps) {
 
     if (confirm) {
       try {
-        await updateParkingSpotState(spot);
-        dispatch(changeSpotState({ spot }));
-
+        await updateParkingSpotState(spot).then(() =>
+          dispatch(changeSpotState({ spot }))
+        );
         if (action === "cancel") {
-          await deleteReservation(user.reservation?.id ?? "");
-          dispatch(setReservation(null));
+          await deleteReservation(user.reservation?.id ?? "").then(() =>
+            dispatch(setReservation(null))
+          );
         } else if (action === "book") {
-          const _id = await addReservation(
+          await addReservation(
             user.id,
             spot._id,
             event?.target.email.value
-          );
-          dispatch(
-            setReservation({
-              _id,
-              spot,
-              email: event?.target.email.value,
-            })
+          ).then((_id) =>
+            dispatch(
+              setReservation({
+                _id,
+                spot,
+                email: event?.target.email.value,
+              })
+            )
           );
         }
       } catch (error) {
@@ -132,21 +134,19 @@ function Parking({ name }: ParkingProps) {
 
   return (
     <>
-      <div className="min-h-screen">
-        {/* GRADIENT */}
-        <div className="absolute h-full inset-0 bg-gradient-to-tr from-pink-200 to-blue-300 to-90% z-0 opacity-50"></div>
+      <div className="min-h-screen flex justify-center items-center bg-gradient-to-tr from-pink-200/35 to-blue-300/35 to-90%">
         {/* APP */}
-        <div className="mx-auto w-5/6 md:w-4/6 2xl:w-5/6 max-w-[1250px] py-14 sm:pt-28 grid grid-cols-1 LG:grid-cols-2 2xl:grid-cols-7 gap-10 relative z-10">
+        <div className="w-[90vw] md:w-9/12 2xl:w-5/6 max-w-[1250px] py-14 grid grid-cols-1 lg:grid-cols-3 2xl:grid-cols-7 2xl:grid-rows-10 gap-5">
           {/* HEADER */}
-          <div className="2xl:col-span-5 lg:col-span-2">
-            <h1 className="text-4xl font-bold mb-3 flex flex-wrap gap-x-2">
+          <div className="lg:col-span-3 2xl:col-span-5 row-span-4 px-7 md:px-14 py-10 rounded-3xl shadow-sm border bg-white">
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 flex flex-wrap gap-x-2 gap-y-1">
               <span className=" pt-0.5">Bienvenue au</span>
               <span className="whitespace-nowrap bg-indigo-200 px-2 pt-0.5 pb-1.5 rounded-md">
                 {name}
               </span>
             </h1>
 
-            <h2 className="text-xl mb-7">
+            <h2 className="text-lg md:text-xl mb-7">
               Découvrez le charme authentique d'Annecy grâce à notre parking en
               ligne.
             </h2>
@@ -163,12 +163,12 @@ function Parking({ name }: ParkingProps) {
           </div>
 
           {/* MAP */}
-          <div className="2xl:col-span-2 row-span-2 min-h-[250px]">
+          <div className="2xl:col-span-2 lg:row-span-6 2xl:row-span-10 min-h-[250px] border">
             <Map />
           </div>
 
           {/* TABLE */}
-          <div className="2xl:col-span-3 h-[465px] px-5 md:px-10 py-7 shadow-sm border rounded-md bg-zinc-100 order-last 2xl:order-none">
+          <div className="lg:col-span-2 2xl:col-span-3 row-span-6 h-[465px] 2xl:h-auto px-7 md:px-12 py-9 rounded-3xl shadow-sm border bg-white order-last 2xl:order-none">
             <SpotTable
               title="Places disponibles"
               setModal={setModal}
@@ -177,7 +177,7 @@ function Parking({ name }: ParkingProps) {
           </div>
 
           {/* RESERVATION */}
-          <div className="2xl:col-span-2 px-5 md:px-10 py-7 shadow-sm border rounded-md h-fit bg-zinc-100 ">
+          <div className="lg:col-span-2 row-span-4 px-7 md:px-12 py-9 2xl:h-auto rounded-3xl shadow-sm border bg-white">
             <h3 className="mb-4 font-bold uppercase">Ma réservation</h3>
             {user.reservation ? (
               <>
@@ -187,8 +187,9 @@ function Parking({ name }: ParkingProps) {
                     {user.reservation?.spot?.number}
                   </li>
                   <li>{reservationDate}</li>
-                  <li className="mt-2">Vos coordonées : </li>
-                  <li>{user.reservation?.email}</li>
+                  <li className="mt-2 break-words">
+                    Vos coordonnées : {user.reservation?.email}
+                  </li>
                 </ul>
                 <Button
                   text="Annuler ma réservation"
@@ -199,6 +200,15 @@ function Parking({ name }: ParkingProps) {
             ) : (
               <p>Vous n'avez actuellement pas de réservation</p>
             )}
+          </div>
+
+          {/* CONTACT */}
+          <div className="2xl:col-span-2 row-span-4 2xl:row-span-2 px-7 md:px-12 py-8 rounded-3xl shadow-sm border bg-white order-last ">
+            <p className="font-bold uppercase">Contact</p>
+            <p className="mt-2">Rue Paul Cézanne, 74000 Annecy</p>
+            <a href="tel:0450338799" className="hover:underline">
+              +33 4 50 33 87 99
+            </a>
           </div>
         </div>
       </div>

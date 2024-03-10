@@ -26,8 +26,6 @@ function App() {
    */
   const initUser = async (storedUserId: string) => {
     const reservation = await getReservationByUser(storedUserId);
-    console.log(reservation);
-
     if (reservation) dispatch(setReservation(reservation));
   };
   useEffect(() => {

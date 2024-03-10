@@ -53,29 +53,31 @@ function SpotTable({ title, spots, setModal }: SpotTableProps) {
 
       {filteredSpots.length ? (
         <div className="overflow-auto md:overflow-x-clip max-h-[300px] pr-4">
-          <table className="table-auto divide-y divide-gray-300 w-full ">
-            <thead className="sticky top-0 bg-slate-200 z-10">
-              <tr>
-                <th className="px-2 md:px-4 py-2 text-sm whitespace-nowrap">
-                  Place n°
-                </th>
-                <th className="px-2 md:px-4 py-2 text-sm">Étage</th>
-                <th className="px-2 md:px-4 py-2 text-sm">État</th>
-                <th className="px-2 md:px-4 py-2 text-sm">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-300">
-              {filteredSpots.map((spot) => (
-                <Spot
-                  key={spot.number}
-                  number={spot.number}
-                  floor={spot.floor}
-                  occupied={spot.occupied}
-                  openModal={(action) => setModal(spot, action)}
-                />
-              ))}
-            </tbody>
-          </table>
+          <div className="rounded overflow-y-hidden">
+            <table className="table-auto divide-y divide-gray-300 w-full ">
+              <thead className="sticky top-0 bg-slate-200 z-10">
+                <tr>
+                  <th className="px-2 md:px-4 py-2 text-sm whitespace-nowrap">
+                    Place n°
+                  </th>
+                  <th className="px-2 md:px-4 py-2 text-sm">Étage</th>
+                  <th className="px-2 md:px-4 py-2 text-sm">État</th>
+                  <th className="px-2 md:px-4 py-2 text-sm">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-300">
+                {filteredSpots.map((spot) => (
+                  <Spot
+                    key={spot.number}
+                    number={spot.number}
+                    floor={spot.floor}
+                    occupied={spot.occupied}
+                    openModal={(action) => setModal(spot, action)}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
         <p className="mt-4">Aucun résultat</p>

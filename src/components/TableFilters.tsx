@@ -87,7 +87,7 @@ function TableFilters({
       </div>
       <div className="flex flex-col gap-1">
         <label htmlFor={stateSelectId} className="text-xs font-semibold">
-          État
+          Statut
         </label>
         <Select
           id={stateSelectId}
