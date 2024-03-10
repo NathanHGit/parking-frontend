@@ -23,9 +23,10 @@ export const fetchParkingData = async () => {
  */
 export const updateParkingSpotState = async ({ _id, occupied }: any) => {
   try {
-    await axios.patch(`${apiUrl}/parking/${_id}`, {
+    const response = await axios.patch(`${apiUrl}/parking/${_id}`, {
       occupied: !occupied,
     });
+    return response.data;
   } catch (error) {
     console.error("Error updating parking spot state:", error);
   }

@@ -102,21 +102,14 @@ function Parking({ name }: ParkingProps) {
   ) => {
     setIsModalOpen(false);
 
-    if (confirm) {
-      try {
-        await updateParkingSpotState(spot).then(() =>
-          dispatch(changeSpotState({ spot }))
+    const updateReservation = async () => {
+      if (action === "cancel") {
+        await deleteReservation(user.reservation?.id ?? "").then(() =>
+          dispatch(setReservation(null))
         );
-        if (action === "cancel") {
-          await deleteReservation(user.reservation?.id ?? "").then(() =>
-            dispatch(setReservation(null))
-          );
-        } else if (action === "book") {
-          await addReservation(
-            user.id,
-            spot._id,
-            event?.target.email.value
-          ).then((_id) =>
+      } else if (action === "book") {
+        await addReservation(user.id, spot._id, event?.target.email.value).then(
+          (_id) =>
             dispatch(
               setReservation({
                 _id,
@@ -124,8 +117,21 @@ function Parking({ name }: ParkingProps) {
                 email: event?.target.email.value,
               })
             )
-          );
-        }
+        );
+      }
+    };
+
+    if (confirm) {
+      try {
+        await updateParkingSpotState(spot).then((res) => {
+          if (!res) {
+            // if a spot has been booked and the page had already been loaded
+            alert("Un problème a eu lieu lors de la réservation");
+            return window.location.reload();
+          }
+          dispatch(changeSpotState({ spot }));
+          updateReservation();
+        });
       } catch (error) {
         console.error("Error handling state change:", error);
       }

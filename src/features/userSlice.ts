@@ -56,7 +56,7 @@ export const userSlice = createSlice({
         const reservation: Reservation = {
           id: action.payload._id,
           user: state.id,
-          spot: action.payload.spot,
+          spot: { ...action.payload.spot, occupied: true },
           date: new Date().toISOString(),
           email: action.payload.email,
         };
