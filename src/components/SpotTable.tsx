@@ -53,7 +53,7 @@ function SpotTable({ title, spots, setModal }: SpotTableProps) {
 
       {filteredSpots.length ? (
         <div className="overflow-auto md:overflow-x-clip max-h-[300px] pr-4">
-          <div className="rounded overflow-y-hidden">
+          <div className="rounded overflow-clip">
             <table className="table-auto divide-y divide-gray-300 w-full ">
               <thead className="sticky top-0 bg-slate-200 z-10">
                 <tr>
